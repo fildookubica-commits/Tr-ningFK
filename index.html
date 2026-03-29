@@ -507,6 +507,33 @@ function renderDetail(){
     }, 50);
   }
 
+  // Info o cviku - tempo a serie
+  var infoBox = document.createElement('div');
+  infoBox.style.cssText = 'background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;gap:12px;';
+  infoBox.className = darkMode ? 'zapis-card' : 'zapis-card';
+
+  var tempoExplain = '';
+  var tp = (cvik.tempo || '').trim();
+  if(tp) {
+    var parts = tp.split('-');
+    var labels = ['Excentrická', 'Prestávka dole', 'Koncentrická', 'Prestávka hore'];
+    tempoExplain = parts.map(function(p,i){ return '<div style="text-align:center;flex:1"><div style="font-size:20px;font-weight:700;color:#FF3B30">'+p+'</div><div style="font-size:10px;color:#8e8e93;margin-top:2px">'+labels[i]+'</div></div>'; }).join('<div style="color:#e5e5ea;font-size:20px;align-self:center">·</div>');
+  }
+
+  infoBox.innerHTML =
+    '<div style="flex:1">' +
+      '<div style="font-size:11px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Tempo</div>' +
+      '<div style="display:flex;gap:4px;align-items:center">' + tempoExplain + '</div>' +
+      '<div style="font-size:11px;color:#8e8e93;margin-top:8px">X = explozívny pohyb</div>' +
+    '</div>' +
+    '<div style="width:1px;background:#f2f2f7;margin:0 4px"></div>' +
+    '<div style="min-width:70px;text-align:center">' +
+      '<div style="font-size:11px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Série</div>' +
+      '<div style="font-size:32px;font-weight:700;color:#FF3B30;line-height:1">' + (cvik.serie || '1') + '</div>' +
+      '<div style="font-size:11px;color:#8e8e93;margin-top:4px">série</div>' +
+    '</div>';
+  body.appendChild(infoBox);
+
   // Zápis nového tréningu
   var zapCard = document.createElement('div');
   zapCard.className = 'zapis-card';
