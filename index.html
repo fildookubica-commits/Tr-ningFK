@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tréning">
+<title>Tréning FK</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:#f2f2f7;min-height:100vh}
+body.dark{background:#1c1c1e;color:#fff}
+
+/* HEADER */
+.app-header{background:#fff;padding:16px 20px 12px;border-bottom:1px solid #e5e5ea;position:sticky;top:0;z-index:50}
+body.dark .app-header{background:#1c1c1e;border-bottom-color:#38383a}
+.header-row{display:flex;align-items:center;justify-content:space-between}
+.app-title{font-size:22px;font-weight:700;color:#1c1c1e}
+body.dark .app-title{color:#fff}
+.app-title span{color:#FF3B30}
+.header-btns{display:flex;gap:8px}
+.hbtn{background:#f2f2f7;border:none;border-radius:20px;padding:6px 14px;font-size:14px;cursor:pointer;color:#007AFF;font-weight:500;font-family:-apple-system,Arial,sans-serif}
+body.dark .hbtn{background:#2c2c2e;color:#0a84ff}
+
+/* PLAN SWITCHER */
+.plan-row{display:flex;gap:8px;margin-top:12px}
+.plan-btn{flex:1;padding:10px;border-radius:12px;border:1.5px solid #e5e5ea;background:#f2f2f7;font-size:14px;font-weight:600;cursor:pointer;color:#8e8e93;font-family:-apple-system,Arial,sans-serif;text-align:center}
+body.dark .plan-btn{background:#2c2c2e;border-color:#38383a}
+.plan-btn.active{background:#FF3B30;border-color:#FF3B30;color:#fff}
+
+/* MAIN */
+.app{max-width:430px;margin:0 auto;padding-bottom:90px}
+
+/* BOTTOM TABS */
+.bottom-tabs{position:fixed;bottom:0;left:0;right:0;z-index:100;background:#fff;border-top:1px solid #e5e5ea;display:flex;padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+body.dark .bottom-tabs{background:#1c1c1e;border-top-color:#38383a}
+.btab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;cursor:pointer;font-size:11px;font-weight:600;color:#8e8e93;border:none;background:none}
+.btab .ti{font-size:22px;line-height:1}
+.btab.active{color:#FF3B30}
+
+/* VIEWS */
+.view{display:none;padding:16px 20px 0}
+.view.show{display:block}
+
+/* CVIKY ZOZNAM */
+.cvik-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:10px;cursor:pointer;border:1.5px solid transparent;transition:border-color 0.15s}
+body.dark .cvik-card{background:#2c2c2e}
+.cvik-card:active{opacity:0.8}
+.cvik-card.has-data{border-left:3px solid #34C759}
+.cvik-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.cvik-name{font-size:15px;font-weight:600;color:#1c1c1e;line-height:1.3}
+body.dark .cvik-name{color:#fff}
+.cvik-meta{font-size:12px;color:#8e8e93;margin-top:4px}
+.cvik-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.cvik-last-weight{font-size:18px;font-weight:700;color:#FF3B30;white-space:nowrap}
+.cvik-last-date{font-size:11px;color:#c7c7cc}
+.cvik-no-data{font-size:12px;color:#c7c7cc;font-style:italic}
+
+/* DETAIL CVIKU */
+.detail-screen{position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;background:#f2f2f7;overflow-y:auto;display:none}
+body.dark .detail-screen{background:#1c1c1e}
+.detail-screen.show{display:block}
+.detail-header{background:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #e5e5ea;position:sticky;top:0;z-index:10}
+body.dark .detail-header{background:#1c1c1e;border-bottom-color:#38383a}
+.back-btn{background:#f2f2f7;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+body.dark .back-btn{background:#2c2c2e}
+.detail-title{font-size:16px;font-weight:700;color:#1c1c1e;flex:1;line-height:1.3}
+body.dark .detail-title{color:#fff}
+.video-btn{background:#FF3B30;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;white-space:nowrap;font-family:-apple-system,Arial,sans-serif;display:none}
+.video-btn.show{display:block}
+.detail-body{padding:16px 20px}
+
+/* MINIBAR GRAF */
+.minibars{display:flex;align-items:flex-end;gap:3px;height:60px;background:#fff;border-radius:12px;padding:8px;margin-bottom:12px}
+body.dark .minibars{background:#2c2c2e}
+.minibar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:2px;height:100%}
+.minibar-fill{width:100%;border-radius:3px 3px 0 0;min-height:3px;background:#FF3B30}
+.minibar-label{font-size:8px;color:#8e8e93;white-space:nowrap}
+
+/* FULL GRAF */
+.chart-wrap{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px}
+body.dark .chart-wrap{background:#2c2c2e}
+.chart-title{font-size:12px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px}
+.chart-canvas-wrap{position:relative;height:160px}
+canvas{width:100%!important}
+
+/* ZÁPIS TRÉNINGU */
+.zapis-card{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px}
+body.dark .zapis-card{background:#2c2c2e}
+.zapis-title{font-size:13px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px}
+.form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.form-col{display:flex;flex-direction:column;gap:4px}
+.form-label{font-size:11px;color:#8e8e93;font-weight:600;text-transform:uppercase}
+.form-input{border:1px solid #e5e5ea;border-radius:10px;padding:10px;font-size:16px;background:#f2f2f7;color:#1c1c1e;text-align:center;-webkit-appearance:none}
+body.dark .form-input{background:#3a3a3c;border-color:#48484a;color:#fff}
+.form-input:focus{outline:none;border-color:#FF3B30}
+.form-date{border:1px solid #e5e5ea;border-radius:10px;padding:10px;font-size:14px;background:#f2f2f7;color:#1c1c1e;width:100%}
+body.dark .form-date{background:#3a3a3c;border-color:#48484a;color:#fff}
+.save-btn{width:100%;padding:14px;background:#FF3B30;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:-apple-system,Arial,sans-serif;margin-top:4px}
+.save-btn:active{opacity:0.8}
+.note-input{width:100%;border:1px solid #e5e5ea;border-radius:10px;padding:10px;font-size:14px;background:#f2f2f7;color:#1c1c1e;resize:none;height:70px;font-family:-apple-system,Arial,sans-serif;margin-top:8px}
+body.dark .note-input{background:#3a3a3c;border-color:#48484a;color:#fff}
+
+/* HISTÓRIA CVIKU */
+.hist-section-title{font-size:13px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
+.hist-item{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center}
+body.dark .hist-item{background:#2c2c2e}
+.hist-left{}
+.hist-datum{font-size:13px;font-weight:600;color:#1c1c1e}
+body.dark .hist-datum{color:#fff}
+.hist-note{font-size:12px;color:#8e8e93;margin-top:2px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist-right{text-align:right}
+.hist-weight{font-size:18px;font-weight:700;color:#FF3B30}
+.hist-opak{font-size:12px;color:#8e8e93}
+.hist-del{background:none;border:none;color:#FF3B30;font-size:20px;cursor:pointer;padding:0 0 0 10px}
+.hist-empty{text-align:center;padding:30px;color:#8e8e93;font-size:14px}
+
+/* HISTÓRIA TRÉNINGOV (tab) */
+.trening-item{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:10px}
+body.dark .trening-item{background:#2c2c2e}
+.trening-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.trening-datum{font-size:15px;font-weight:700;color:#1c1c1e}
+body.dark .trening-datum{color:#fff}
+.trening-plan-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#ffd6d6;color:#c0392b}
+.trening-cviky{font-size:13px;color:#8e8e93;line-height:1.6}
+.trening-note{font-size:13px;color:#007AFF;margin-top:6px;font-style:italic}
+
+/* STATUS */
+.status-bar{text-align:center;font-size:14px;color:#34C759;padding:8px;min-height:24px;font-weight:500}
+
+/* STATS VIEW */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-card{background:#fff;border-radius:14px;padding:14px}
+body.dark .stat-card{background:#2c2c2e}
+.stat-label{font-size:12px;color:#8e8e93;margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:700;color:#FF3B30}
+.stat-sub{font-size:11px;color:#8e8e93;margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- DETAIL CVIKU (fullscreen) -->
+<div class="detail-screen" id="detailScreen">
+  <div class="detail-header">
+    <button class="back-btn" onclick="closeDetail()">←</button>
+    <div class="detail-title" id="detailTitle"></div>
+    <button class="video-btn" id="videoBtnDetail" onclick="openVideo()">▶ Video</button>
+  </div>
+  <div class="detail-body" id="detailBody"></div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app">
+  <div class="app-header">
+    <div class="header-row">
+      <div class="app-title">Tréning <span>FK</span></div>
+      <div class="header-btns">
+        <button class="hbtn" id="syncBtn" onclick="syncFromSheets()" title="Načítať zo Sheets">☁️</button>
+        <button class="hbtn" id="darkBtn" onclick="toggleDark()">🌙</button>
+      </div>
+    </div>
+    <div class="plan-row">
+      <button class="plan-btn active" id="planBtn0" onclick="setPlan(0)">💪 Fullbody 1</button>
+      <button class="plan-btn" id="planBtn1" onclick="setPlan(1)">🔥 Fullbody 2</button>
+    </div>
+  </div>
+
+  <!-- TAB: CVIKY -->
+  <div class="view show" id="viewCviky">
+    <div class="status-bar" id="statusBar"></div>
+    <div id="cvikyList"></div>
+  </div>
+
+  <!-- TAB: HISTÓRIA -->
+  <div class="view" id="viewHistoria">
+    <div style="padding-top:4px" id="historiaList"></div>
+  </div>
+
+  <!-- TAB: ŠTATISTIKY -->
+  <div class="view" id="viewStats">
+    <div style="padding-top:4px" id="statsList"></div>
+  </div>
+</div>
+
+<!-- BOTTOM TABS -->
+<div class="bottom-tabs">
+  <button class="btab active" onclick="switchTab('cviky')" id="tab-cviky">
+    <span class="ti">💪</span>Cviky
+  </button>
+  <button class="btab" onclick="switchTab('historia')" id="tab-historia">
+    <span class="ti">📅</span>História
+  </button>
+  <button class="btab" onclick="switchTab('stats')" id="tab-stats">
+    <span class="ti">📊</span>Štatistiky
+  </button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// ── GOOGLE SHEETS CONFIG ────────────────────────────────────────
+// 1. Vlož sem URL z Google Apps Script po nasadení (Deploy → Web App URL)
+var SHEETS_URL = ''; // napr. 'https://script.google.com/macros/s/XXXXX/exec'
+
+// ── SHEETS API ───────────────────────────────────────────────────
+function sheetsRequest(params, cb) {
+  if (!SHEETS_URL) { if(cb) cb(null); return; }
+  var cbName = 'gs_cb_' + Date.now();
+  var script = document.createElement('script');
+  params.callback = cbName;
+  var qs = Object.keys(params).map(function(k){
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+  window[cbName] = function(data) {
+    if(cb) cb(data);
+    delete window[cbName];
+    try { document.body.removeChild(script); } catch(e) {}
+  };
+  script.src = SHEETS_URL + '?' + qs;
+  script.onerror = function() { if(cb) cb(null); delete window[cbName]; };
+  document.body.appendChild(script);
+}
+
+function syncToSheets(planName, cvidNazov, record, cb) {
+  if (!SHEETS_URL || !navigator.onLine) { if(cb) cb(); return; }
+  sheetsRequest({
+    action: 'save',
+    sheet: 'Záznamy',
+    id: record._id || Date.now(),
+    plan: planName,
+    cvik: cvidNazov,
+    datum: record.datum,
+    vaha: record.vaha,
+    opak: record.opak || '',
+    serie: record.serie || 1,
+    note: record.note || ''
+  }, function(res) {
+    if(cb) cb(res);
+  });
+}
+
+function loadFromSheets(cb) {
+  if (!SHEETS_URL || !navigator.onLine) { if(cb) cb([]); return; }
+  sheetsRequest({ action: 'loadRecords', sheet: 'Záznamy' }, function(res) {
+    if(res && res.status === 'ok') {
+      if(cb) cb(res.records || []);
+    } else {
+      if(cb) cb([]);
+    }
+  });
+}
+
+// Offline queue pre Sheets
+var sheetsQueue = [];
+try { sheetsQueue = JSON.parse(localStorage.getItem('sheetsQueue') || '[]'); } catch(e) {}
+
+function flushSheetsQueue() {
+  if (!navigator.onLine || !SHEETS_URL || sheetsQueue.length === 0) return;
+  setStatus('🔄 Synchronizujem ' + sheetsQueue.length + ' záznamy...');
+  var q = sheetsQueue.slice();
+  sheetsQueue = [];
+  localStorage.setItem('sheetsQueue', '[]');
+  q.forEach(function(item) {
+    syncToSheets(item.plan, item.cvik, item.record);
+  });
+  setTimeout(function() { setStatus('✅ Synchronizované!'); }, 1500);
+}
+
+window.addEventListener('online', function() {
+  setTimeout(flushSheetsQueue, 1000);
+});
+
+// ── DÁTA Z EXCELU ────────────────────────────────────────────────
+var PLANS = [
+  {
+    plan: "Fullbody 1",
+    cviky: [
+      {id:"tlaky_na_prsia_na_sikmej_lavici",nazov:"Tlaky na prsia na šikmej lavici - multipress",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:80,opak:5,serie:1},{datum:"2025-09-06",vaha:80,opak:6,serie:1}]},
+      {id:"preacher_curls_scottova_lavica",nazov:"Preacher curls na Scottovej lavici unilaterálne s jednoručkou",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:14,opak:7,serie:1},{datum:"2025-09-06",vaha:18,opak:4,serie:1}]},
+      {id:"pec_deck",nazov:"Pec deck",tempo:"3-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:77.5,opak:7,serie:1},{datum:"2025-09-06",vaha:85,opak:6,serie:1},{datum:"2025-09-06",vaha:85,opak:7,serie:1},{datum:"2025-09-06",vaha:85,opak:7,serie:1}]},
+      {id:"jewers_triceps_extenzie",nazov:"Jewers tricepsové extenzie s lankom/tyčou",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-09-06",vaha:60,opak:7,serie:2},{datum:"2025-09-06",vaha:60,opak:9,serie:2},{datum:"2025-09-06",vaha:65,opak:7,serie:2}]},
+      {id:"stahovanie_kladky_nadhmatom",nazov:"Sťahovanie kladky nadhmatom na široko",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:70,opak:7,serie:1},{datum:"2025-08-05",vaha:70,opak:7,serie:1},{datum:"2025-08-05",vaha:70,opak:7.5,serie:1},{datum:"2025-08-05",vaha:70,opak:8,serie:1},{datum:"2025-08-05",vaha:70,opak:8,serie:1}]},
+      {id:"tlaky_na_ramena_stroj",nazov:"Tlaky na ramená - stroj",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:70,opak:8,serie:1},{datum:"2025-08-05",vaha:75,opak:8,serie:1},{datum:"2025-08-05",vaha:85,opak:8,serie:1},{datum:"2025-08-05",vaha:90,opak:6,serie:1},{datum:"2025-08-05",vaha:95,opak:4,serie:1},{datum:"2025-08-05",vaha:95,opak:4,serie:1}]},
+      {id:"pritahy_nadhmatom_laktami",nazov:"Príťahy nadhmatom s laktami od tela - stroj",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-08-05",vaha:70,opak:9,serie:2},{datum:"2025-08-05",vaha:70,opak:9,serie:2},{datum:"2025-08-05",vaha:70,opak:10,serie:2}]},
+      {id:"mrtve_tahy_vystrete_kolena",nazov:"Mŕtve ťahy s vystretými kolenami",tempo:"3-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:90,opak:7,serie:1},{datum:"2025-09-06",vaha:100,opak:6,serie:1},{datum:"2025-09-06",vaha:100,opak:6,serie:1},{datum:"2025-09-06",vaha:100,opak:6,serie:1}]},
+      {id:"predkopavanie",nazov:"Predkopávanie",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-09-06",vaha:80,opak:10,serie:2},{datum:"2025-09-06",vaha:85,opak:10,serie:2},{datum:"2025-09-06",vaha:100,opak:10,serie:2},{datum:"2025-09-06",vaha:100,opak:14,serie:2},{datum:"2025-09-06",vaha:100,opak:11,serie:2},{datum:"2025-09-06",vaha:100,opak:11,serie:2}]},
+      {id:"vypony_lytka_legpress",nazov:"Výpony na lýtka na legpresse",tempo:"3-2-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:110,opak:8,serie:1},{datum:"2025-09-06",vaha:110,opak:9,serie:1},{datum:"2025-09-06",vaha:150,opak:11,serie:1},{datum:"2025-09-06",vaha:250,opak:11,serie:1},{datum:"2025-09-06",vaha:200,opak:15,serie:1}]}
+    ]
+  },
+  {
+    plan: "Fullbody 2",
+    cviky: [
+      {id:"rovne_tlaky_stroj",nazov:"Rovné tlaky na prsia - stroj",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:70,opak:7,serie:1}]},
+      {id:"bicepsove_zdvihy_scottova_opacne",nazov:"Bicepsové zdvihy na Scottovej lavici opačne",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-08-05",vaha:16,opak:7,serie:2}]},
+      {id:"low_to_high_flyes",nazov:"Low to high flyes unilaterálne v sede",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:25,opak:7,serie:1}]},
+      {id:"triceps_extenzie_unilat",nazov:"Tricepsové extenzie unilaterálne s lankom/káblom",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:55,opak:5,serie:1}]},
+      {id:"drepy_multipress",nazov:"Drepy na multipresse",tempo:"3-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"zakopavanie_sede",nazov:"Zakopávanie v sede",tempo:"3-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:65,opak:7,serie:1}]},
+      {id:"vypony_lytka_legpress_2",nazov:"Výpony na lýtka na legpresse",tempo:"3-2-X-0",serie:"2",video:"",historia:[{datum:"2025-09-06",vaha:240,opak:10,serie:2}]},
+      {id:"upazovanie_jednorucker",nazov:"Upažovanie s jednoručkami",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-09-06",vaha:12,opak:9,serie:2}]},
+      {id:"low_row_hrudna_opierka",nazov:"Low row s hrudnou opierkou s laktami pri tele",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-08-05",vaha:77.5,opak:8,serie:2}]},
+      {id:"skracovacky",nazov:"Skracovačky",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-10-07",vaha:5,opak:12,serie:2}]}
+    ]
+  }
+];
+
+// ── STATE ────────────────────────────────────────────────────────
+var currentPlan = 0;
+var currentTab = 'cviky';
+var currentCvik = null;
+var darkMode = false;
+
+// ── STORAGE ──────────────────────────────────────────────────────
+function storeKey(planIdx, cvidId){ return 'trening_' + planIdx + '_' + cvidId; }
+
+function loadHistoria(planIdx, cvidId){
+  // Zlúčiť zabudovanú históriu s localStorage
+  var base = (PLANS[planIdx].cviky.find(function(c){return c.id===cvidId;})||{}).historia || [];
+  try{
+    var saved = JSON.parse(localStorage.getItem(storeKey(planIdx, cvidId)) || '[]');
+    // Zlúč - saved záznamy majú _saved flag
+    var all = base.concat(saved.filter(function(s){return s._saved;}));
+    return all.sort(function(a,b){return a.datum.localeCompare(b.datum);});
+  }catch(e){ return base; }
+}
+
+function saveRecord(planIdx, cvidId, record){
+  var saved = [];
+  try{ saved = JSON.parse(localStorage.getItem(storeKey(planIdx, cvidId)) || '[]'); }catch(e){}
+  record._saved = true;
+  record._id = Date.now();
+  saved.push(record);
+  localStorage.setItem(storeKey(planIdx, cvidId), JSON.stringify(saved));
+}
+
+function deleteRecord(planIdx, cvidId, id){
+  var saved = [];
+  try{ saved = JSON.parse(localStorage.getItem(storeKey(planIdx, cvidId)) || '[]'); }catch(e){}
+  saved = saved.filter(function(s){ return s._id !== id; });
+  localStorage.setItem(storeKey(planIdx, cvidId), JSON.stringify(saved));
+  // Ak je to zabudovaný záznam, ulož ho do "deleted"
+  var deleted = [];
+  try{ deleted = JSON.parse(localStorage.getItem('deleted_' + storeKey(planIdx, cvidId)) || '[]'); }catch(e){}
+  deleted.push(id);
+  localStorage.setItem('deleted_' + storeKey(planIdx, cvidId), JSON.stringify(deleted));
+}
+
+// ── UI POMOCNÉ ───────────────────────────────────────────────────
+function setStatus(msg){
+  var s = document.getElementById('statusBar');
+  if(s){ s.textContent = msg; setTimeout(function(){ s.textContent = ''; }, 2500); }
+}
+
+function toggleDark(){
+  darkMode = !darkMode;
+  document.body.classList.toggle('dark', darkMode);
+  document.getElementById('darkBtn').textContent = darkMode ? '☀️' : '🌙';
+  localStorage.setItem('darkMode', darkMode ? '1' : '0');
+}
+
+function setPlan(idx){
+  currentPlan = idx;
+  [0,1].forEach(function(i){
+    document.getElementById('planBtn'+i).className = 'plan-btn' + (i===idx?' active':'');
+  });
+  renderCviky();
+}
+
+function switchTab(tab){
+  currentTab = tab;
+  ['cviky','historia','stats'].forEach(function(t){
+    document.getElementById('view'+t.charAt(0).toUpperCase()+t.slice(1)).className = 'view' + (t===tab?' show':'');
+    document.getElementById('tab-'+t).className = 'btab' + (t===tab?' active':'');
+  });
+  if(tab==='historia') renderHistoria();
+  if(tab==='stats') renderStats();
+}
+
+// ── CVIKY ZOZNAM ─────────────────────────────────────────────────
+function renderCviky(){
+  var plan = PLANS[currentPlan];
+  var list = document.getElementById('cvikyList');
+  if(!list) return;
+  list.innerHTML = '';
+
+  plan.cviky.forEach(function(cvik, idx){
+    var hist = loadHistoria(currentPlan, cvik.id);
+    var lastEntry = hist.length > 0 ? hist[hist.length-1] : null;
+
+    var card = document.createElement('div');
+    card.className = 'cvik-card' + (hist.length > 0 ? ' has-data' : '');
+
+    var rightHtml = lastEntry
+      ? '<div class="cvik-last-weight">' + lastEntry.vaha + ' kg</div><div class="cvik-last-date">' + formatDatum(lastEntry.datum) + '</div>'
+      : '<div class="cvik-no-data">—</div>';
+
+    // Minibar graf (posledných 5 tréningov)
+    var minibar = '';
+    if(hist.length > 1){
+      var last5 = hist.slice(-5);
+      var maxW = Math.max.apply(null, last5.map(function(h){return h.vaha;}));
+      minibar = '<div class="minibars" style="margin-top:8px">' +
+        last5.map(function(h){
+          var pct = maxW > 0 ? Math.round(h.vaha/maxW*100) : 0;
+          return '<div class="minibar-col"><div style="flex:1;display:flex;align-items:flex-end;width:100%"><div class="minibar-fill" style="height:'+pct+'%"></div></div><div class="minibar-label">'+h.vaha+'</div></div>';
+        }).join('') + '</div>';
+    }
+
+    card.innerHTML =
+      '<div class="cvik-header">' +
+        '<div><div class="cvik-name">' + cvik.nazov + '</div><div class="cvik-meta">Tempo: ' + cvik.tempo + ' · ' + cvik.serie + ' séria</div></div>' +
+        '<div class="cvik-right">' + rightHtml + '</div>' +
+      '</div>' + minibar;
+
+    card.onclick = function(){ openDetail(idx); };
+    list.appendChild(card);
+  });
+}
+
+function formatDatum(d){
+  var parts = d.split('-');
+  if(parts.length === 3) return parts[2]+'.'+parts[1]+'.'+parts[0];
+  return d;
+}
+
+// ── DETAIL CVIKU ─────────────────────────────────────────────────
+var detailChart = null;
+
+function openDetail(cvidIdx){
+  var cvik = PLANS[currentPlan].cviky[cvidIdx];
+  currentCvik = {planIdx: currentPlan, cvidIdx: cvidIdx, cvik: cvik};
+
+  document.getElementById('detailTitle').textContent = cvik.nazov;
+
+  var videoBtn = document.getElementById('videoBtnDetail');
+  if(cvik.video && cvik.video.length > 0){
+    videoBtn.className = 'video-btn show';
+  } else {
+    videoBtn.className = 'video-btn';
+  }
+
+  document.getElementById('detailScreen').className = 'detail-screen show';
+  renderDetail();
+}
+
+function openVideo(){
+  if(currentCvik && currentCvik.cvik.video){
+    window.open(currentCvik.cvik.video, '_blank');
+  }
+}
+
+function closeDetail(){
+  document.getElementById('detailScreen').className = 'detail-screen';
+  if(detailChart){ detailChart.destroy(); detailChart = null; }
+  currentCvik = null;
+  renderCviky();
+}
+
+function renderDetail(){
+  if(!currentCvik) return;
+  var cvik = currentCvik.cvik;
+  var planIdx = currentCvik.planIdx;
+  var hist = loadHistoria(planIdx, cvik.id);
+  var body = document.getElementById('detailBody');
+  if(!body) return;
+  body.innerHTML = '';
+
+  // Graf progresu
+  if(hist.length > 1){
+    var chartWrap = document.createElement('div');
+    chartWrap.className = 'chart-wrap';
+    chartWrap.innerHTML = '<div class="chart-title">Progres váhy (kg)</div><div class="chart-canvas-wrap"><canvas id="progressChart"></canvas></div>';
+    body.appendChild(chartWrap);
+
+    setTimeout(function(){
+      var ctx = document.getElementById('progressChart');
+      if(!ctx) return;
+      if(detailChart){ detailChart.destroy(); }
+      var labels = hist.map(function(h){ return formatDatum(h.datum); });
+      var data = hist.map(function(h){ return h.vaha; });
+      detailChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Váha (kg)',
+            data: data,
+            borderColor: '#FF3B30',
+            backgroundColor: 'rgba(255,59,48,0.1)',
+            borderWidth: 2.5,
+            pointBackgroundColor: '#FF3B30',
+            pointRadius: 4,
+            tension: 0.3,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { font: { size: 10 }, maxRotation: 45 }, grid: { display: false } },
+            y: { ticks: { font: { size: 11 } } }
+          }
+        }
+      });
+    }, 50);
+  }
+
+  // Zápis nového tréningu
+  var zapCard = document.createElement('div');
+  zapCard.className = 'zapis-card';
+  var today = new Date().toISOString().slice(0,10);
+  var lastVaha = hist.length > 0 ? hist[hist.length-1].vaha : '';
+  var lastOpak = hist.length > 0 ? hist[hist.length-1].opak : '';
+  var lastSerie = hist.length > 0 ? hist[hist.length-1].serie : (cvik.serie || 1);
+
+  zapCard.innerHTML =
+    '<div class="zapis-title">Zapísať tréning</div>' +
+    '<input type="date" class="form-date" id="zapDatum" value="' + today + '" style="margin-bottom:10px">' +
+    '<div class="form-row">' +
+      '<div class="form-col"><div class="form-label">Váha (kg)</div><input type="number" class="form-input" id="zapVaha" value="' + lastVaha + '" step="0.5" min="0" inputmode="decimal"></div>' +
+      '<div class="form-col"><div class="form-label">Opakovania</div><input type="number" class="form-input" id="zapOpak" value="' + lastOpak + '" min="0" inputmode="numeric"></div>' +
+      '<div class="form-col"><div class="form-label">Séria</div><input type="number" class="form-input" id="zapSerie" value="' + lastSerie + '" min="1" inputmode="numeric"></div>' +
+    '</div>' +
+    '<textarea class="note-input" id="zapNote" placeholder="Poznámka k tréningu..."></textarea>' +
+    '<button class="save-btn" onclick="saveZapis()">💾 Uložiť</button>';
+  body.appendChild(zapCard);
+
+  // História
+  if(hist.length > 0){
+    var histTitle = document.createElement('div');
+    histTitle.className = 'hist-section-title';
+    histTitle.textContent = 'História (' + hist.length + ')';
+    body.appendChild(histTitle);
+
+    var histReversed = hist.slice().reverse();
+    histReversed.forEach(function(h){
+      var item = document.createElement('div');
+      item.className = 'hist-item';
+      var noteHtml = h.note ? '<div class="hist-note">📝 ' + h.note + '</div>' : '';
+      var delHtml = h._saved ? '<button class="hist-del" onclick="deleteZapis(' + h._id + ')">×</button>' : '';
+      item.innerHTML =
+        '<div class="hist-left"><div class="hist-datum">' + formatDatum(h.datum) + '</div>' + noteHtml + '</div>' +
+        '<div style="display:flex;align-items:center">' +
+          '<div class="hist-right"><div class="hist-weight">' + h.vaha + ' kg</div><div class="hist-opak">' + (h.opak || '—') + ' opak · ' + (h.serie || 1) + ' série</div></div>' +
+          delHtml +
+        '</div>';
+      body.appendChild(item);
+    });
+  } else {
+    var empty = document.createElement('div');
+    empty.className = 'hist-empty';
+    empty.textContent = 'Zatiaľ žiadne záznamy. Zadaj prvý tréning! 💪';
+    body.appendChild(empty);
+  }
+}
+
+function saveZapis(){
+  if(!currentCvik) return;
+  var datum = document.getElementById('zapDatum').value;
+  var vaha = parseFloat(document.getElementById('zapVaha').value);
+  var opak = parseFloat(document.getElementById('zapOpak').value);
+  var serie = parseFloat(document.getElementById('zapSerie').value) || 1;
+  var note = document.getElementById('zapNote').value.trim();
+
+  if(!datum || isNaN(vaha) || vaha <= 0){ setStatus('⚠️ Zadaj váhu!'); return; }
+
+  var record = { datum: datum, vaha: vaha, opak: opak || null, serie: serie };
+  if(note) record.note = note;
+
+  saveRecord(currentCvik.planIdx, currentCvik.cvik.id, record);
+  
+  // Sync do Google Sheets
+  var planName = PLANS[currentCvik.planIdx].plan;
+  var cvidNazov = currentCvik.cvik.nazov;
+  if (SHEETS_URL && navigator.onLine) {
+    syncToSheets(planName, cvidNazov, record, function(res) {
+      if(res && res.status === 'ok') {
+        setStatus('✅ Uložené + zálohované do Sheets!');
+      } else {
+        setStatus('✅ Uložené lokálne (Sheets nedostupné)');
+      }
+    });
+  } else if (SHEETS_URL && !navigator.onLine) {
+    // Ulož do offline queue
+    sheetsQueue.push({ plan: planName, cvik: cvidNazov, record: record });
+    localStorage.setItem('sheetsQueue', JSON.stringify(sheetsQueue));
+    setStatus('✅ Uložené lokálne (offline – sync neskôr)');
+  } else {
+    setStatus('✅ Uložené!');
+  }
+
+  if(detailChart){ detailChart.destroy(); detailChart = null; }
+  renderDetail();
+}
+
+function deleteZapis(id){
+  if(!currentCvik) return;
+  deleteRecord(currentCvik.planIdx, currentCvik.cvik.id, id);
+  if(detailChart){ detailChart.destroy(); detailChart = null; }
+  renderDetail();
+  setStatus('🗑️ Záznam vymazaný');
+}
+
+// ── HISTÓRIA TRÉNINGOV ───────────────────────────────────────────
+function renderHistoria(){
+  var list = document.getElementById('historiaList');
+  if(!list) return;
+
+  // Zbieraj všetky záznamy zo všetkých plánov a cvikov
+  var allRecords = [];
+  PLANS.forEach(function(plan, planIdx){
+    plan.cviky.forEach(function(cvik){
+      var hist = loadHistoria(planIdx, cvik.id);
+      hist.forEach(function(h){
+        allRecords.push({
+          datum: h.datum,
+          cvik: cvik.nazov,
+          plan: plan.plan,
+          vaha: h.vaha,
+          opak: h.opak,
+          note: h.note || ''
+        });
+      });
+    });
+  });
+
+  // Zoraď podľa dátumu, zoskup po dňoch
+  allRecords.sort(function(a,b){ return b.datum.localeCompare(a.datum); });
+
+  var byDate = {};
+  allRecords.forEach(function(r){
+    if(!byDate[r.datum]) byDate[r.datum] = {plan: r.plan, items: []};
+    byDate[r.datum].items.push(r);
+  });
+
+  list.innerHTML = '';
+  var dates = Object.keys(byDate).sort().reverse();
+
+  if(dates.length === 0){
+    list.innerHTML = '<div class="hist-empty" style="padding:40px">Zatiaľ žiadne tréningy<br>Začni zapísať prvý! 💪</div>';
+    return;
+  }
+
+  dates.forEach(function(datum){
+    var day = byDate[datum];
+    var item = document.createElement('div');
+    item.className = 'trening-item';
+    var cvikLines = day.items.map(function(r){
+      return '• ' + r.cvik.slice(0,40) + (r.cvik.length>40?'...':'') + ' — <strong>' + r.vaha + 'kg</strong>' + (r.opak?' × '+r.opak:'');
+    }).join('<br>');
+    item.innerHTML =
+      '<div class="trening-header"><div class="trening-datum">' + formatDatum(datum) + '</div><span class="trening-plan-badge">' + day.plan + '</span></div>' +
+      '<div class="trening-cviky">' + cvikLines + '</div>';
+    list.appendChild(item);
+  });
+}
+
+// ── ŠTATISTIKY ───────────────────────────────────────────────────
+function renderStats(){
+  var list = document.getElementById('statsList');
+  if(!list) return;
+
+  var totalRecords = 0;
+  var totalWeight = 0;
+  var cvikyWithProgress = 0;
+  var bestProgress = null;
+
+  PLANS.forEach(function(plan, planIdx){
+    plan.cviky.forEach(function(cvik){
+      var hist = loadHistoria(planIdx, cvik.id);
+      if(hist.length === 0) return;
+      totalRecords += hist.length;
+      hist.forEach(function(h){ totalWeight += h.vaha; });
+      if(hist.length >= 2){
+        cvikyWithProgress++;
+        var progress = hist[hist.length-1].vaha - hist[0].vaha;
+        if(!bestProgress || progress > bestProgress.val){
+          bestProgress = { nazov: cvik.nazov, val: progress, plan: plan.plan };
+        }
+      }
+    });
+  });
+
+  var treningDni = new Set();
+  PLANS.forEach(function(plan, planIdx){
+    plan.cviky.forEach(function(cvik){
+      loadHistoria(planIdx, cvik.id).forEach(function(h){ treningDni.add(h.datum); });
+    });
+  });
+
+  list.innerHTML = '';
+
+  // Summary karty
+  var grid = document.createElement('div');
+  grid.className = 'stats-grid';
+  grid.innerHTML = [
+    {l:'Tréningové dni', v: treningDni.size, sub:'celkovo'},
+    {l:'Zapísaných sérií', v: totalRecords, sub:'všetky plány'},
+    {l:'Cviky s progresom', v: cvikyWithProgress, sub:'merané cviky'},
+    {l:'Ø váha na cvik', v: totalRecords > 0 ? Math.round(totalWeight/totalRecords) + ' kg' : '—', sub:'priemer'}
+  ].map(function(s){
+    return '<div class="stat-card"><div class="stat-label">'+s.l+'</div><div class="stat-val">'+s.v+'</div><div class="stat-sub">'+s.sub+'</div></div>';
+  }).join('');
+  list.appendChild(grid);
+
+  // Najlepší progres
+  if(bestProgress){
+    var bestCard = document.createElement('div');
+    bestCard.className = 'zapis-card';
+    bestCard.innerHTML = '<div class="zapis-title">🏆 Najlepší progres</div>' +
+      '<div style="font-size:14px;font-weight:600;color:#1c1c1e;margin-bottom:4px">' + bestProgress.nazov + '</div>' +
+      '<div style="font-size:22px;font-weight:700;color:#34C759">+' + bestProgress.val + ' kg</div>' +
+      '<div style="font-size:12px;color:#8e8e93">' + bestProgress.plan + '</div>';
+    list.appendChild(bestCard);
+  }
+
+  // Progres každého cviku
+  PLANS.forEach(function(plan, planIdx){
+    var planTitle = document.createElement('div');
+    planTitle.className = 'hist-section-title';
+    planTitle.style.marginBottom = '10px';
+    planTitle.textContent = plan.plan;
+    list.appendChild(planTitle);
+
+    plan.cviky.forEach(function(cvik){
+      var hist = loadHistoria(planIdx, cvik.id);
+      if(hist.length === 0) return;
+      var first = hist[0].vaha;
+      var last = hist[hist.length-1].vaha;
+      var diff = last - first;
+      var diffStr = (diff >= 0 ? '+' : '') + diff + ' kg';
+      var diffColor = diff > 0 ? '#34C759' : diff < 0 ? '#FF3B30' : '#8e8e93';
+
+      var item = document.createElement('div');
+      item.className = 'hist-item';
+      item.innerHTML =
+        '<div><div style="font-size:13px;font-weight:600;color:#1c1c1e">' + cvik.nazov.slice(0,40) + '</div><div style="font-size:11px;color:#8e8e93">' + hist.length + ' záz. · od '+first+' kg</div></div>' +
+        '<div style="font-size:18px;font-weight:700;color:'+diffColor+'">'+diffStr+'</div>';
+      list.appendChild(item);
+    });
+  });
+}
+
+// ── SYNC ZO SHEETS ───────────────────────────────────────────────
+function syncFromSheets() {
+  if (!SHEETS_URL) {
+    setStatus('⚠️ Nastav SHEETS_URL v kóde!');
+    return;
+  }
+  if (!navigator.onLine) {
+    setStatus('⚠️ Offline – nie je možné načítať');
+    return;
+  }
+  setStatus('🔄 Načítavam zo Sheets...');
+  loadFromSheets(function(records) {
+    if (!records || records.length === 0) {
+      setStatus('ℹ️ Sheets prázdny alebo chyba');
+      return;
+    }
+    // Ulož každý záznam do localStorage ak ho ešte nemáme
+    var imported = 0;
+    records.forEach(function(r) {
+      // Nájdi cvik podľa názvu
+      PLANS.forEach(function(plan, planIdx) {
+        if (plan.plan !== r.plan) return;
+        var cvik = plan.cviky.find(function(c){ return c.nazov === r.cvik; });
+        if (!cvik) return;
+        // Skontroluj či záznam už existuje
+        var existing = [];
+        try { existing = JSON.parse(localStorage.getItem(storeKey(planIdx, cvik.id)) || '[]'); } catch(e) {}
+        var duplicate = existing.find(function(e){ return e.datum === r.datum && e.vaha == r.vaha; });
+        if (!duplicate) {
+          var rec = {
+            datum: r.datum,
+            vaha: parseFloat(r.vaha),
+            opak: r.opak ? parseFloat(r.opak) : null,
+            serie: r.serie ? parseFloat(r.serie) : 1,
+            note: r.note || '',
+            _saved: true,
+            _id: r.id || Date.now() + Math.random()
+          };
+          existing.push(rec);
+          localStorage.setItem(storeKey(planIdx, cvik.id), JSON.stringify(existing));
+          imported++;
+        }
+      });
+    });
+    setStatus('✅ Načítané ' + imported + ' nových záznamov zo Sheets!');
+    renderCviky();
+    if (currentTab === 'historia') renderHistoria();
+    if (currentTab === 'stats') renderStats();
+  });
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', function(){
+  // Dark mode
+  var saved = localStorage.getItem('darkMode');
+  if(saved === '1'){ darkMode = true; document.body.classList.add('dark'); document.getElementById('darkBtn').textContent = '☀️'; }
+  renderCviky();
+});
+</script>
+</body>
+</html>
