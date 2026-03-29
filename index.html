@@ -517,20 +517,21 @@ function renderDetail(){
   if(tp) {
     var parts = tp.split('-');
     var labels = ['Excentrická', 'Prestávka dole', 'Koncentrická', 'Prestávka hore'];
-    tempoExplain = parts.map(function(p,i){ return '<div style="text-align:center"><div style="font-size:16px;font-weight:700;color:#FF3B30;background:#ffd6d6;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center">'+p+'</div><div style="font-size:9px;color:#8e8e93;margin-top:3px;max-width:40px;line-height:1.2">'+labels[i]+'</div></div>'; }).join('<div style="color:#e5e5ea;font-size:14px;align-self:flex-start;margin-top:8px">-</div>');
+    tempoExplain = parts.map(function(p,i){ return '<div style="text-align:center;flex:1"><div style="font-size:20px;font-weight:700;color:#FF3B30">'+p+'</div><div style="font-size:10px;color:#8e8e93;margin-top:2px">'+labels[i]+'</div></div>'; }).join('<div style="color:#e5e5ea;font-size:20px;align-self:center">·</div>');
   }
 
-  // Tempo riadok
-  infoBox.style.cssText = 'background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;';
+  infoBox.style.cssText = 'background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;gap:12px;';
   infoBox.innerHTML =
-    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">' +
-      '<div style="font-size:11px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap">Tempo:</div>' +
-      '<div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">' + tempoExplain + '</div>' +
+    '<div style="flex:1;min-width:0">' +
+      '<div style="font-size:11px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Tempo</div>' +
+      '<div style="display:flex;gap:4px;align-items:center;flex-wrap:wrap">' + tempoExplain + '</div>' +
+      '<div style="font-size:10px;color:#c7c7cc;margin-top:6px">X = explozívny pohyb</div>' +
     '</div>' +
-    '<div style="font-size:11px;color:#8e8e93;margin-bottom:12px">X = explozívny pohyb</div>' +
-    '<div style="display:flex;align-items:center;gap:8px">' +
-      '<div style="font-size:11px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em">Séria:</div>' +
-      '<div style="font-size:22px;font-weight:700;color:#FF3B30;line-height:1">' + (cvik.serie || '1') + 'x</div>' +
+    '<div style="width:1px;background:#f2f2f7;flex-shrink:0"></div>' +
+    '<div style="width:60px;flex-shrink:0;text-align:center">' +
+      '<div style="font-size:11px;font-weight:700;color:#8e8e93;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px">Séria</div>' +
+      '<div style="font-size:32px;font-weight:700;color:#FF3B30;line-height:1">' + (cvik.serie || '1') + '</div>' +
+      '<div style="font-size:11px;color:#8e8e93;margin-top:4px">série</div>' +
     '</div>';
   body.appendChild(infoBox);
 
@@ -545,10 +546,12 @@ function renderDetail(){
   zapCard.innerHTML =
     '<div class="zapis-title">Zapísať tréning</div>' +
     '<input type="date" class="form-date" id="zapDatum" value="' + today + '" style="margin-bottom:10px">' +
-    '<div class="form-row">' +
+    '<div class="form-row" style="grid-template-columns:1fr 1fr">' +
       '<div class="form-col"><div class="form-label">Váha (kg)</div><input type="number" class="form-input" id="zapVaha" value="' + lastVaha + '" step="0.5" min="0" inputmode="decimal"></div>' +
       '<div class="form-col"><div class="form-label">Opakovania</div><input type="number" class="form-input" id="zapOpak" value="' + lastOpak + '" min="0" inputmode="numeric"></div>' +
-      '<div class="form-col"><div class="form-label">Séria</div><input type="number" class="form-input" id="zapSerie" value="' + lastSerie + '" min="1" inputmode="numeric"></div>' +
+    '</div>' +
+    '<div class="form-row" style="grid-template-columns:1fr">' +
+      '<div class="form-col"><div class="form-label">Séria</div><input type="number" class="form-input" id="zapSerie" value="' + lastSerie + '" min="1" inputmode="numeric" style="max-width:120px"></div>' +
     '</div>' +
     '<textarea class="note-input" id="zapNote" placeholder="Poznámka k tréningu..."></textarea>' +
     '<button class="save-btn" onclick="saveZapis()">💾 Uložiť</button>';
