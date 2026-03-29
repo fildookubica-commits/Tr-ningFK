@@ -95,7 +95,7 @@ body.dark .zapis-card{background:#2c2c2e}
 .form-input{border:1px solid #e5e5ea;border-radius:10px;padding:10px;font-size:16px;background:#f2f2f7;color:#1c1c1e;text-align:center;-webkit-appearance:none;width:100%;box-sizing:border-box}
 body.dark .form-input{background:#3a3a3c;border-color:#48484a;color:#fff}
 .form-input:focus{outline:none;border-color:#FF3B30}
-.form-date{border:1px solid #e5e5ea;border-radius:10px;padding:10px;font-size:14px;background:#f2f2f7;color:#1c1c1e;width:100%;box-sizing:border-box}
+.form-date{border:1px solid #e5e5ea;border-radius:10px;padding:10px;font-size:15px;background:#f2f2f7;color:#1c1c1e;width:100%;box-sizing:border-box;display:block;-webkit-appearance:none;appearance:none;min-height:44px}
 body.dark .form-date{background:#3a3a3c;border-color:#48484a;color:#fff}
 .save-btn{width:100%;padding:14px;background:#FF3B30;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:-apple-system,Arial,sans-serif;margin-top:4px}
 .save-btn:active{opacity:0.8}
@@ -275,31 +275,31 @@ var PLANS = [
   {
     plan: "Fullbody 1",
     cviky: [
-      {id:"tlaky_na_prsia_na_sikmej_lavici",nazov:"Tlaky na prsia na šikmej lavici - multipress",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:80,opak:5,serie:1},{datum:"2025-09-06",vaha:80,opak:6,serie:1}]},
-      {id:"preacher_curls_scottova_lavica",nazov:"Preacher curls na Scottovej lavici unilaterálne s jednoručkou",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:14,opak:7,serie:1},{datum:"2025-09-06",vaha:18,opak:4,serie:1}]},
-      {id:"pec_deck",nazov:"Pec deck",tempo:"3-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:77.5,opak:7,serie:1},{datum:"2025-09-06",vaha:85,opak:6,serie:1},{datum:"2025-09-06",vaha:85,opak:7,serie:1},{datum:"2025-09-06",vaha:85,opak:7,serie:1}]},
-      {id:"jewers_triceps_extenzie",nazov:"Jewers tricepsové extenzie s lankom/tyčou",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-09-06",vaha:60,opak:7,serie:2},{datum:"2025-09-06",vaha:60,opak:9,serie:2},{datum:"2025-09-06",vaha:65,opak:7,serie:2}]},
-      {id:"stahovanie_kladky_nadhmatom",nazov:"Sťahovanie kladky nadhmatom na široko",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:70,opak:7,serie:1},{datum:"2025-08-05",vaha:70,opak:7,serie:1},{datum:"2025-08-05",vaha:70,opak:7.5,serie:1},{datum:"2025-08-05",vaha:70,opak:8,serie:1},{datum:"2025-08-05",vaha:70,opak:8,serie:1}]},
-      {id:"tlaky_na_ramena_stroj",nazov:"Tlaky na ramená - stroj",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:70,opak:8,serie:1},{datum:"2025-08-05",vaha:75,opak:8,serie:1},{datum:"2025-08-05",vaha:85,opak:8,serie:1},{datum:"2025-08-05",vaha:90,opak:6,serie:1},{datum:"2025-08-05",vaha:95,opak:4,serie:1},{datum:"2025-08-05",vaha:95,opak:4,serie:1}]},
-      {id:"pritahy_nadhmatom_laktami",nazov:"Príťahy nadhmatom s laktami od tela - stroj",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-08-05",vaha:70,opak:9,serie:2},{datum:"2025-08-05",vaha:70,opak:9,serie:2},{datum:"2025-08-05",vaha:70,opak:10,serie:2}]},
-      {id:"mrtve_tahy_vystrete_kolena",nazov:"Mŕtve ťahy s vystretými kolenami",tempo:"3-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:90,opak:7,serie:1},{datum:"2025-09-06",vaha:100,opak:6,serie:1},{datum:"2025-09-06",vaha:100,opak:6,serie:1},{datum:"2025-09-06",vaha:100,opak:6,serie:1}]},
-      {id:"predkopavanie",nazov:"Predkopávanie",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-09-06",vaha:80,opak:10,serie:2},{datum:"2025-09-06",vaha:85,opak:10,serie:2},{datum:"2025-09-06",vaha:100,opak:10,serie:2},{datum:"2025-09-06",vaha:100,opak:14,serie:2},{datum:"2025-09-06",vaha:100,opak:11,serie:2},{datum:"2025-09-06",vaha:100,opak:11,serie:2}]},
-      {id:"vypony_lytka_legpress",nazov:"Výpony na lýtka na legpresse",tempo:"3-2-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:110,opak:8,serie:1},{datum:"2025-09-06",vaha:110,opak:9,serie:1},{datum:"2025-09-06",vaha:150,opak:11,serie:1},{datum:"2025-09-06",vaha:250,opak:11,serie:1},{datum:"2025-09-06",vaha:200,opak:15,serie:1}]}
+      {id:"tlaky_na_prsia_na_sikmej_lavici",nazov:"Tlaky na prsia na šikmej lavici - multipress",tempo:"2-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"preacher_curls_scottova_lavica",nazov:"Preacher curls na Scottovej lavici unilaterálne s jednoručkou",tempo:"2-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"pec_deck",nazov:"Pec deck",tempo:"3-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"jewers_triceps_extenzie",nazov:"Jewers tricepsové extenzie s lankom/tyčou",tempo:"2-0-X-0",serie:"2",video:"",historia:[]},
+      {id:"stahovanie_kladky_nadhmatom",nazov:"Sťahovanie kladky nadhmatom na široko",tempo:"2-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"tlaky_na_ramena_stroj",nazov:"Tlaky na ramená - stroj",tempo:"2-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"pritahy_nadhmatom_laktami",nazov:"Príťahy nadhmatom s laktami od tela - stroj",tempo:"2-0-X-0",serie:"2",video:"",historia:[]},
+      {id:"mrtve_tahy_vystrete_kolena",nazov:"Mŕtve ťahy s vystretými kolenami",tempo:"3-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"predkopavanie",nazov:"Predkopávanie",tempo:"2-0-X-0",serie:"2",video:"",historia:[]},
+      {id:"vypony_lytka_legpress",nazov:"Výpony na lýtka na legpresse",tempo:"3-2-X-0",serie:"1",video:"",historia:[]}
     ]
   },
   {
     plan: "Fullbody 2",
     cviky: [
-      {id:"rovne_tlaky_stroj",nazov:"Rovné tlaky na prsia - stroj",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:70,opak:7,serie:1}]},
-      {id:"bicepsove_zdvihy_scottova_opacne",nazov:"Bicepsové zdvihy na Scottovej lavici opačne",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-08-05",vaha:16,opak:7,serie:2}]},
-      {id:"low_to_high_flyes",nazov:"Low to high flyes unilaterálne v sede",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:25,opak:7,serie:1}]},
-      {id:"triceps_extenzie_unilat",nazov:"Tricepsové extenzie unilaterálne s lankom/káblom",tempo:"2-0-X-0",serie:"1",video:"",historia:[{datum:"2025-09-06",vaha:55,opak:5,serie:1}]},
+      {id:"rovne_tlaky_stroj",nazov:"Rovné tlaky na prsia - stroj",tempo:"2-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"bicepsove_zdvihy_scottova_opacne",nazov:"Bicepsové zdvihy na Scottovej lavici opačne",tempo:"2-0-X-0",serie:"2",video:"",historia:[]},
+      {id:"low_to_high_flyes",nazov:"Low to high flyes unilaterálne v sede",tempo:"2-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"triceps_extenzie_unilat",nazov:"Tricepsové extenzie unilaterálne s lankom/káblom",tempo:"2-0-X-0",serie:"1",video:"",historia:[]},
       {id:"drepy_multipress",nazov:"Drepy na multipresse",tempo:"3-0-X-0",serie:"1",video:"",historia:[]},
-      {id:"zakopavanie_sede",nazov:"Zakopávanie v sede",tempo:"3-0-X-0",serie:"1",video:"",historia:[{datum:"2025-08-05",vaha:65,opak:7,serie:1}]},
-      {id:"vypony_lytka_legpress_2",nazov:"Výpony na lýtka na legpresse",tempo:"3-2-X-0",serie:"2",video:"",historia:[{datum:"2025-09-06",vaha:240,opak:10,serie:2}]},
-      {id:"upazovanie_jednorucker",nazov:"Upažovanie s jednoručkami",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-09-06",vaha:12,opak:9,serie:2}]},
-      {id:"low_row_hrudna_opierka",nazov:"Low row s hrudnou opierkou s laktami pri tele",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-08-05",vaha:77.5,opak:8,serie:2}]},
-      {id:"skracovacky",nazov:"Skracovačky",tempo:"2-0-X-0",serie:"2",video:"",historia:[{datum:"2025-10-07",vaha:5,opak:12,serie:2}]}
+      {id:"zakopavanie_sede",nazov:"Zakopávanie v sede",tempo:"3-0-X-0",serie:"1",video:"",historia:[]},
+      {id:"vypony_lytka_legpress_2",nazov:"Výpony na lýtka na legpresse",tempo:"3-2-X-0",serie:"2",video:"",historia:[]},
+      {id:"upazovanie_jednorucker",nazov:"Upažovanie s jednoručkami",tempo:"2-0-X-0",serie:"2",video:"",historia:[]},
+      {id:"low_row_hrudna_opierka",nazov:"Low row s hrudnou opierkou s laktami pri tele",tempo:"2-0-X-0",serie:"2",video:"",historia:[]},
+      {id:"skracovacky",nazov:"Skracovačky",tempo:"2-0-X-0",serie:"2",video:"",historia:[]}
     ]
   }
 ];
@@ -545,11 +545,11 @@ function renderDetail(){
 
   zapCard.innerHTML =
     '<div class="zapis-title">Zapísať tréning</div>' +
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">' +
-      '<div class="form-col" style="grid-column:1/-1"><div class="form-label">Dátum</div><input type="date" class="form-date" id="zapDatum" value="' + today + '"></div>' +
-      '<div class="form-col"><div class="form-label">Váha (kg)</div><input type="number" class="form-input" id="zapVaha" value="' + lastVaha + '" step="0.5" min="0" inputmode="decimal"></div>' +
-      '<div class="form-col"><div class="form-label">Opakovania</div><input type="number" class="form-input" id="zapOpak" value="' + lastOpak + '" min="0" inputmode="numeric"></div>' +
-      '<div class="form-col"><div class="form-label">Séria</div><input type="number" class="form-input" id="zapSerie" value="' + lastSerie + '" min="1" inputmode="numeric"></div>' +
+    '<div style="margin-bottom:8px"><div class="form-label" style="margin-bottom:4px">Dátum</div><input type="date" class="form-date" id="zapDatum" value="' + today + '"></div>' +
+    '<div style="display:flex;gap:8px;margin-bottom:8px">' +
+      '<div style="flex:1;min-width:0"><div class="form-label" style="margin-bottom:4px">Váha (kg)</div><input type="number" class="form-input" id="zapVaha" value="' + lastVaha + '" step="0.5" min="0" inputmode="decimal"></div>' +
+      '<div style="flex:1;min-width:0"><div class="form-label" style="margin-bottom:4px">Opakovania</div><input type="number" class="form-input" id="zapOpak" value="' + lastOpak + '" min="0" inputmode="numeric"></div>' +
+      '<div style="flex:1;min-width:0"><div class="form-label" style="margin-bottom:4px">Séria</div><input type="number" class="form-input" id="zapSerie" value="' + lastSerie + '" min="1" inputmode="numeric"></div>' +
     '</div>' +
     '<textarea class="note-input" id="zapNote" placeholder="Poznámka k tréningu..."></textarea>' +
     '<button class="save-btn" onclick="saveZapis()">💾 Uložiť</button>';
