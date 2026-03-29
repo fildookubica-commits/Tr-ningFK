@@ -545,13 +545,11 @@ function renderDetail(){
 
   zapCard.innerHTML =
     '<div class="zapis-title">Zapísať tréning</div>' +
-    '<input type="date" class="form-date" id="zapDatum" value="' + today + '" style="margin-bottom:10px">' +
-    '<div class="form-row" style="grid-template-columns:1fr 1fr">' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">' +
+      '<div class="form-col" style="grid-column:1/-1"><div class="form-label">Dátum</div><input type="date" class="form-date" id="zapDatum" value="' + today + '"></div>' +
       '<div class="form-col"><div class="form-label">Váha (kg)</div><input type="number" class="form-input" id="zapVaha" value="' + lastVaha + '" step="0.5" min="0" inputmode="decimal"></div>' +
       '<div class="form-col"><div class="form-label">Opakovania</div><input type="number" class="form-input" id="zapOpak" value="' + lastOpak + '" min="0" inputmode="numeric"></div>' +
-    '</div>' +
-    '<div class="form-row" style="grid-template-columns:1fr">' +
-      '<div class="form-col"><div class="form-label">Séria</div><input type="number" class="form-input" id="zapSerie" value="' + lastSerie + '" min="1" inputmode="numeric" style="max-width:120px"></div>' +
+      '<div class="form-col"><div class="form-label">Séria</div><input type="number" class="form-input" id="zapSerie" value="' + lastSerie + '" min="1" inputmode="numeric"></div>' +
     '</div>' +
     '<textarea class="note-input" id="zapNote" placeholder="Poznámka k tréningu..."></textarea>' +
     '<button class="save-btn" onclick="saveZapis()">💾 Uložiť</button>';
